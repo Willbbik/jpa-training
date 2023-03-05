@@ -15,15 +15,24 @@ public class Main {
         tx.begin();
 
         try{
-
+            //저장
             Team team = new Team();
             team.setName("TeamA");
             em.persist(team);
 
+            System.out.println("teamId " + team.getId());
+
             Member member = new Member();
             member.setUsername("memberA");
-            member.setTeamId(team.getId());
+            member.setTeam(team);
             em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = findMember.getTeam();
+            System.out.println("findTeam = " + findTeam.getName());
 
             tx.commit();
         }catch (Exception e){
